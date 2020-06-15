@@ -1,0 +1,125 @@
+<!doctype html><html lang=en class="js csstransforms3d"><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=generator content="Hugo 0.71.1"><meta name=description content="CoreRuleSet Documentation"><meta name=author content="CoreRuleSet"><link rel=icon href=/images/favicon.png type=image/png><title>Making :: Core Rule Set Documentation</title><link href=/css/nucleus.css?1592185552 rel=stylesheet><link href=/css/fontawesome-all.min.css?1592185552 rel=stylesheet><link href=/css/hybrid.css?1592185552 rel=stylesheet><link href=/css/featherlight.min.css?1592185552 rel=stylesheet><link href=/css/perfect-scrollbar.min.css?1592185552 rel=stylesheet><link href=/css/auto-complete.css?1592185552 rel=stylesheet><link href=/css/atom-one-dark-reasonable.css?1592185552 rel=stylesheet><link href=/css/theme.css?1592185552 rel=stylesheet><link href=/css/hugo-theme.css?1592185552 rel=stylesheet><link href=/css/theme-blue.css?1592185552 rel=stylesheet><link href=/css/foo.css?1592185552 rel=stylesheet><link href=/css/bar.css?1592185552 rel=stylesheet><script src=/js/jquery-3.3.1.min.js?1592185552></script><style>:root #header+#content>#left>#rlblock_left{display:none!important}</style></head><body data-url=/deployment/making/><nav id=sidebar><div id=header-wrapper><div id=header><a id=logo href=/><img src=//images/logo.png></a></div><div class=searchbox><label for=search-by><i class="fas fa-search"></i></label><input data-search-input id=search-by type=search placeholder=Search...>
+<span data-search-clear><i class="fas fa-times"></i></span></div><script type=text/javascript src=/js/lunr.min.js?1592185552></script><script type=text/javascript src=/js/auto-complete.js?1592185552></script><script type=text/javascript>var baseurl="\/";</script><script type=text/javascript src=/js/search.js?1592185552></script></div><div class=highlightable><ul class=topics><li data-nav-id=/deployment/ title="OWASP CRS Quickstart" class="dd-item
+parent"><a href=/deployment/>Deployment</a><ul><li data-nav-id=/deployment/install/ title="Installing CoreRuleSet" class=dd-item><a href=/deployment/install/><b>1. </b>Install</a></li><li data-nav-id=/deployment/configuration/ title=Configuration class=dd-item><a href=/deployment/configuration/><b>2. </b>Configuration</a></li><li data-nav-id=/deployment/rules/ title=Rules class=dd-item><a href=/deployment/rules/><b>3. </b>Rules</a></li><li data-nav-id=/deployment/exceptions/ title="Adding Exceptions and Tuning CRS" class=dd-item><a href=/deployment/exceptions/><b>4. </b>Exceptions</a></li><li data-nav-id=/deployment/testing/ title="Testing the Rule Set" class=dd-item><a href=/deployment/testing/><b>5. </b>Testing</a></li><li data-nav-id=/deployment/anomaly/ title="Anomaly Scoring Mode" class=dd-item><a href=/deployment/anomaly/><b>6. </b>Anomaly</a></li><li data-nav-id=/deployment/support/ title="Still need help?" class=dd-item><a href=/deployment/support/><b>8. </b>Support</a></li><li data-nav-id=/deployment/making/ title=Making class="dd-item active"><a href=/deployment/making/><b>9. </b>Making</a></li><li data-nav-id=/deployment/metadata/ title=Metadata class=dd-item><a href=/deployment/metadata/><b>10. </b>Metadata</a></li></ul></li><li data-nav-id=/development/ title=Developments class=dd-item><a href=/development/>Developments</a><ul><li data-nav-id=/development/ruleid/ title="Rule IDs" class=dd-item><a href=/development/ruleid/><b>1. </b>Rule IDs</a></li></ul></li></ul><section id=footer><p>Built with <a href=https://github.com/matcornic/hugo-theme-learn><i class="fas fa-heart"></i></a>from <a href=https://getgrav.org>Grav</a> and <a href=https://gohugo.io/>Hugo</a></p></section></div></nav><section id=body><div id=overlay></div><div class="padding highlightable"><div><div id=top-bar><div id=top-github-link><a class=github-link title="Edit this page" href=https://github.com/coreruleset/coreruleset-documentation/deployment/making.md target=blank><i class="fas fa-code-branch"></i><span id=top-github-link-text>Edit this page</span></a></div><div id=breadcrumbs itemscope itemtype=http://data-vocabulary.org/Breadcrumb><span id=sidebar-toggle-span><a href=# id=sidebar-toggle data-sidebar-toggle><i class="fas fa-bars"></i></a></span><span id=toc-menu><i class="fas fa-list-alt"></i></span><span class=links>Making</span></div><div class=progress><div class=wrapper><nav id=TableOfContents><ul><li><a href=#the-basic-synatax>The Basic Synatax</a></li><li><a href=#advanced-variable-usage>Advanced Variable Usage</a></li><li><a href=#advanced-transformation-usage>Advanced Transformation Usage</a></li><li><a href=#advanced-action-usage>Advanced Action Usage</a></li><li><a href=#advanced-operator-usage>Advanced Operator Usage</a></li><li><a href=#rules-for-crs>Rules for CRS</a></li></ul></nav></div></div></div></div><div id=head-tags></div><div id=body-inner><h1>Making</h1><h1 id=making-rules>Making Rules</h1><h2 id=the-basic-synatax>The Basic Synatax</h2><p>A <a href=https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#SecRule>SecRule</a>
+is a directive like any other understood by ModSecurity. The difference
+is that this directive is way more powerful in what it is capable of
+representing. Generally, a SecRule is made up of 4 parts: * Variables -
+Instructs ModSecurity <em>where</em> to look (sometimes called Targets) *
+Operators - Instructs ModSecurity <em>when</em> to trigger a match *
+Transformations - Instructs ModSecurity <em>how</em> it should normalize
+variable data * Actions - Instructs ModSecurity <em>what</em> to do if a rule
+matches</p><p>The structure of the rule is as follows:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRule VARIABLES <span style=color:#e6db74>&#34;OPERATOR&#34;</span> <span style=color:#e6db74>&#34;TRANSFORMATIONS,ACTIONS&#34;</span>
+</code></pre></div><p>A very basic rule looks as follows:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRule REQUEST_URI <span style=color:#e6db74>&#34;@streq /index.php&#34;</span> <span style=color:#e6db74>&#34;id:1,phase:1,t:lowercase,deny&#34;</span>
+</code></pre></div><p>The preceding rule will take each HTTP Request and obtain just the URI
+portion. From there is will transform the URI value to lowercase.
+Subsequently it will check to see if that transformed value is equal to
+exactly <code>'/index.php'</code>. If it is Modsecurity will deny the request, that
+is, it will stop processing further rules and intercept the request.</p><p>As can be seen from the previous explaination, one of the unique things
+about the SecRule directive is that each SecRule listed in your
+configuration is evaluated on each transaction. All the other
+ModSecurity directives are only evaluated at startup.</p><p>Clearly, if this was all there was to SecRules it wouldn&rsquo;t be very
+powerful. In fact, there is a lot more. So much more that it is in fact
+a full fledged language. The best place to find out about all the
+possible capabilities is via the <a href=https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual>ModSecurity Manual</a>.
+The following is just a glimpse of its capabilities:</p><p>There are ~105 <strong>variables</strong> in 6 different categories, some examples
+include:</p><ul><li><strong>Request Variables</strong> - ARGS, REQUEST_HEADERS, REQUEST_COOKIES</li><li><strong>Response Variables</strong> - RESPONSE_HEADERS, RESPONSE_BODY</li><li><strong>Server Variables</strong> - REMOTE_ADDR, AUTH_TYPE</li><li><strong>Time Variables</strong> - TIME, TIME_EPOCH, TIME_HOUR</li><li><strong>Collection Variables</strong> - TX, IP, SESSION, GEO</li><li><strong>Miscellaneous Variables</strong> - HIGHEST_SEVERITY, MATCHED_VAR</li></ul><p>There are ~36 <strong>operators</strong> in 4 different categories, some examples
+include:</p><ul><li><strong>String Operators</strong> - rx, pm, beginsWith, contains, endsWith,
+streq, within</li><li><strong>Numerical Operators</strong> - eq, ge, gt, le, lt</li><li><strong>Validation Operators</strong> - validateByteRange, validateUrlEncoding,
+validateSchema</li><li><strong>Miscellaneous Operators</strong> - rbl, geoLookup, inspectFile, verifyCC</li></ul><p>There are ~35 <strong>transformation</strong> functions in 6 different categories,
+some examples include:</p><ul><li><strong>Anti-Evasion Functions</strong> - lowercase, normalisePath, removeNulls,
+replaceComments, compressWhitespace</li><li><strong>Decoding Functions</strong> - base64Decode, hexDecode, jsDecode,
+urlDecodeUni</li><li><strong>Encoding Functions</strong> - base64Encode, hexEncode</li><li><strong>Hashing Functions</strong> - sha1, md5</li></ul><p>There are ~47 <strong>actions</strong> in 6 different categories, some examples
+include:</p><ul><li><strong>Disruptive Actions</strong> - block, drop, deny, proxy</li><li><strong>Flow Actions</strong> - chain, skip, skipAfter</li><li><strong>Metadata Actions</strong> - phase, id, msg, severity, tag</li><li><strong>Variable Actions</strong> - capture, setvar, initcol</li><li><strong>Logging Actions</strong> - log, auditlog, nolog, sanitiseArg</li><li><strong>Miscellaneous Actions</strong> - ctl, multiMatch, exec, pause,
+append/prepend</li></ul><p>While there are a lot of options available there are a few basic things
+to remember.</p><ol><li>Every SecRule must have a VARIABLE</li><li>Every SecRule must have an OPERATOR, if none is listed @rx is
+implied.</li><li>Every SecRule must have an ACTION. The only required action is id,
+however, several actions are implied by SecDefaultAction (default
+phase:2,log,auditlog,pass)</li><li>Every SecRule must have an phase ACTION, this tells the rule when to
+fire. If no phase is included the default is phase:2.</li><li>Every SecRule must have a disruptive ACTION. This is an action that
+describes what to do with the transaction if triggered. If no
+disruptive action is included the default is pass</li><li>Transformations are optional but should be used to prevent your rule
+from being bypassed</li></ol><h2 id=advanced-variable-usage>Advanced Variable Usage</h2><p>Variables themselves are quite easy to access as our earlier rules have
+shown. There are a couple of corner cases though. Not all variables are
+strings. Some variables, like ARGS_GET are <strong>Collections</strong>. A
+collection is very similar to a dictionary in Python, it is a key value
+pair of information. For instance if our request URI was
+<a href="http://www.example.com?x=test&y=test2">http://www.example.com?x=test&y=test2</a> our collection might look like
+ARGS_GET = {"x" : "test", "y" : "test2"}. When we request an
+VARIABLE that is a collection, ModSecurity will iterate over each value
+in the collection, applying transformations and checking against the
+operator, until it finds a match. If it finds a match it will stop
+processing the rule and undertake any actions specified.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRule ARGS_GET <span style=color:#e6db74>&#34;@contains test&#34;</span> <span style=color:#e6db74>&#34;id:1,phase:1,t:lowercase,deny&#34;</span>
+</code></pre></div><p>It is possible to access just an index of a collection as well. This
+makes addressing specific variable very easy. To do this within the
+VARIABLE area of a SecRule you use the ':' (colon).</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRule ARGS_GET:username <span style=color:#e6db74>&#34;@contains admin&#34;</span> <span style=color:#e6db74>&#34;id:1,phase:1,t:lowercase,deny&#34;</span>
+</code></pre></div><p>One operator is nice but what if I have to apply one operator on
+multiple rules, for instance I want to check GET parameters and COOKIES.
+ModSecurity provides a way for you to do this. You can use the '|'
+(pipe) to combine two VARIABLES into one rule. This pipe can be applied
+as many times as you want. In the example below we combine both GET and
+POST arguments. In fact, this is not necessary in reality as there is a
+built in ARGS collections that already does this.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRule ARGS_GET|ARGS_POST|REQUEST_COOKIES <span style=color:#e6db74>&#34;@rx hello\s\d{1,3}&#34;</span> <span style=color:#e6db74>&#34;id:1,phase:2,t:lowercase,deny&#34;</span>
+</code></pre></div><p>If you are having a problem where one of your variables is causing false
+positives or you just don't want to look there you can also remove an
+index of a collection using the '!' (exclamation mark). This almost
+always used in conjunction with the pipe and an index, ModSecurity will
+understand that this means remove this index from the collection</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRule ARGS|!ARGS:password <span style=color:#e6db74>&#34;@rx (admin|administrator)&#34;</span> <span style=color:#e6db74>&#34;id:1,phase:2,t:lowercase,deny&#34;</span>
+</code></pre></div><h2 id=advanced-transformation-usage>Advanced Transformation Usage</h2><p>The concept of transformations is very intuitive and thanks to
+ModSecurity's open source nature there are quite a few to choose from.
+An issue arises in that the proper application of transformations often
+takes knowledge about how the threat you are trying to stop can manifest
+itself. Imagine the following example - you are trying to detect an XSS
+(Cross Site Scripting) attack.</p><p>Your first attempt looks like the following:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRule ARGS <span style=color:#e6db74>&#34;@contains &lt;script&gt;&#34;</span> <span style=color:#e6db74>&#34;id:1,deny,status:403&#34;</span>
+</code></pre></div><p>This can be easily bypassed by using uppercase such as
+?x=&lt;sCript>alert(1);&lt;/script>. So we can apply a transformation:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRule ARGS <span style=color:#e6db74>&#34;@contains &lt;script&gt;&#34;</span> <span style=color:#e6db74>&#34;id:1,deny,status:403,t:lowercase&#34;</span>
+</code></pre></div><p>This too can be easily bypassed by simply appending a space ?x=&lt;sCript
+>alert(1);&lt;/script>. So we need more transformations:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRule ARGS <span style=color:#e6db74>&#34;@contains &lt;script&gt;&#34;</span> <span style=color:#e6db74>&#34;id:1,deny,status:403,t:lowercase,t:removeWhitespace&#34;</span>
+</code></pre></div><p>In many contexts HTML entities might be interpreted and converted back
+to their ASCII form. That would allow us to by pass this rule with
+something like &lt;sCript >alert(1);&lt;/script>.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRule ARGS <span style=color:#e6db74>&#34;@contains &lt;script&gt;&#34;</span> <span style=color:#e6db74>&#34;id:1,deny,status:403,t:lowercase,t:removeWhitespace,t:htmlEntityDecode&#34;</span>
+</code></pre></div><p>As you can see this type of approach can go on for a while and is why
+OWASP CRS is important. We put our rules out there and continuously
+allow people to test them. If they find an issue we fix it and the cycle
+continues. This attempt to blacklist malicious attacks is a constant
+battle, it is always encouraged that you whitelist where available.
+Currently if you look at CRS you'll see there are many XSS rules. Each
+rule may have 5 or 6 different transformations and the operators get
+more complex all the time.</p><h2 id=advanced-action-usage>Advanced Action Usage</h2><h2 id=advanced-operator-usage>Advanced Operator Usage</h2><p>Most OPERATORS are self explanatory. Many operators such as the string
+manipulation operators take arguments. Some operators such as the
+libinjection @detectXSS do not. In general the semantics for most
+OPERATORS is quite straight forward. The exception to this rule is the
+default operator @rx, or regular expressions. Even if you know how to
+use regular expression, it is still quite easy to make a mistake in a
+security context. When writing a rule remember the following guidelines:</p><ul><li>Regexp should avoid using ^ (alternative: A) and $
+(alternative: Z) symbols, which are metacharacters for start and end
+of a string. It is possible to bypass regex by inserting any symbol
+in front or after regexp.</li><li>Regexp should be case-insensitive. It is possible to bypass regex
+using upper or lower cases in words. Modsecurity transformation
+commands (which are applied on string before regex pattern is
+applied) can also be included in tests to cover more regexps [51].</li><li>Regexp should avoid using dot &ldquo;.&rdquo; symbol, which means every symbol
+except newline (n). It is possible to bypass regex using newline
+injection.</li><li>Number of repetitions of set or group {} should be carefully used,
+as one can bypass such limitation by lowering or increasing
+specified numbers.</li><li>Best Practice from slides of Ivan Novikov [2]: Modsecurity should
+avoid using t:urlDecode function (t:urlDecodeUni instead).</li><li>Regexp should only use plus &ldquo;+&rdquo; metacharacter in places where it is
+necessary, as it means &ldquo;one or more&rdquo;. Alternative metacharacter star
+&ldquo;*", which means &ldquo;zero or more&rdquo; is generally preferred.</li><li>Usage of wildcards should be reasonable. rn characters can often be
+bypassed by either substitution, or by using newline alternative v,
+f and others. Wildcard b has different meanings while using wildcard
+in square brackets (has meaning &ldquo;backspace&rdquo;) and in plain regex (has
+meaning &ldquo;word boundary&rdquo;), as classified in RegexLib article [42].</li><li>Regexp should be applied to right scope of inputs: Cookies names and
+values, Argument names and values, Header names and values, Files
+argument names and content.</li><li>Regular expression writers should be careful while using only
+whitespace character (%20) for separating tag attributes. Rule can
+be bypassed with newline character: i.e. %0d,%0a.</li><li>Greediness of regular expressions should be considered. Highlight of
+this topic is well done in Chapter 9 of Jan Goyvaert&rsquo;s tutorial
+[27]. While greediness itself does not create bypasses, bad
+implementation of regexp Greediness can raise False Positive rate.
+This can cause excessive log-file flooding, forcing vulnerable rule
+or even whole WAF to be switched off.</li></ul><h2 id=rules-for-crs>Rules for CRS</h2><p>All rules for CRS should include at least one regression test. To
+increase the chances of having your pull request accepted into the
+mainline more regression tests are recommended.</p><p>If your rule contains combination of data sources into a single regular
+expression for performance reasons you should document the use of the
+regexp-assemble command in the comments above your command. You should
+also include your independent sources within this util directory. Doing
+so increases overall maintainability.</p><footer class=footline></footer></div></div><div id=navigation><a class="nav nav-prev" href=/deployment/support/ title="Still need help?"><i class="fa fa-chevron-left"></i></a><a class="nav nav-next" href=/deployment/metadata/ title=Metadata style=margin-right:0><i class="fa fa-chevron-right"></i></a></div></section><div style=left:-1000px;overflow:scroll;position:absolute;top:-1000px;border:none;box-sizing:content-box;height:200px;margin:0;padding:0;width:200px><div style=border:none;box-sizing:content-box;height:200px;margin:0;padding:0;width:200px></div></div><script src=/js/clipboard.min.js?1592185552></script><script src=/js/perfect-scrollbar.min.js?1592185552></script><script src=/js/perfect-scrollbar.jquery.min.js?1592185552></script><script src=/js/jquery.sticky.js?1592185552></script><script src=/js/featherlight.min.js?1592185552></script><script src=/js/highlight.pack.js?1592185552></script><script>hljs.initHighlightingOnLoad();</script><script src=/js/modernizr.custom-3.6.0.js?1592185552></script><script src=/js/learn.js?1592185552></script><script src=/js/hugo-learn.js?1592185552></script><link href=/mermaid/mermaid.css?1592185552 rel=stylesheet><script src=/mermaid/mermaid.js?1592185552></script><script>mermaid.initialize({startOnLoad:true});</script></body></html>

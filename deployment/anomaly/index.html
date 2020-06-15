@@ -1,0 +1,191 @@
+<!doctype html><html lang=en class="js csstransforms3d"><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=generator content="Hugo 0.71.1"><meta name=description content="CoreRuleSet Documentation"><meta name=author content="CoreRuleSet"><link rel=icon href=/images/favicon.png type=image/png><title>Anomaly Scoring Mode :: Core Rule Set Documentation</title><link href=/css/nucleus.css?1592185552 rel=stylesheet><link href=/css/fontawesome-all.min.css?1592185552 rel=stylesheet><link href=/css/hybrid.css?1592185552 rel=stylesheet><link href=/css/featherlight.min.css?1592185552 rel=stylesheet><link href=/css/perfect-scrollbar.min.css?1592185552 rel=stylesheet><link href=/css/auto-complete.css?1592185552 rel=stylesheet><link href=/css/atom-one-dark-reasonable.css?1592185552 rel=stylesheet><link href=/css/theme.css?1592185552 rel=stylesheet><link href=/css/hugo-theme.css?1592185552 rel=stylesheet><link href=/css/theme-blue.css?1592185552 rel=stylesheet><link href=/css/foo.css?1592185552 rel=stylesheet><link href=/css/bar.css?1592185552 rel=stylesheet><script src=/js/jquery-3.3.1.min.js?1592185552></script><style>:root #header+#content>#left>#rlblock_left{display:none!important}</style></head><body data-url=/deployment/anomaly/><nav id=sidebar><div id=header-wrapper><div id=header><a id=logo href=/><img src=//images/logo.png></a></div><div class=searchbox><label for=search-by><i class="fas fa-search"></i></label><input data-search-input id=search-by type=search placeholder=Search...>
+<span data-search-clear><i class="fas fa-times"></i></span></div><script type=text/javascript src=/js/lunr.min.js?1592185552></script><script type=text/javascript src=/js/auto-complete.js?1592185552></script><script type=text/javascript>var baseurl="\/";</script><script type=text/javascript src=/js/search.js?1592185552></script></div><div class=highlightable><ul class=topics><li data-nav-id=/deployment/ title="OWASP CRS Quickstart" class="dd-item
+parent"><a href=/deployment/>Deployment</a><ul><li data-nav-id=/deployment/install/ title="Installing CoreRuleSet" class=dd-item><a href=/deployment/install/><b>1. </b>Install</a></li><li data-nav-id=/deployment/configuration/ title=Configuration class=dd-item><a href=/deployment/configuration/><b>2. </b>Configuration</a></li><li data-nav-id=/deployment/rules/ title=Rules class=dd-item><a href=/deployment/rules/><b>3. </b>Rules</a></li><li data-nav-id=/deployment/exceptions/ title="Adding Exceptions and Tuning CRS" class=dd-item><a href=/deployment/exceptions/><b>4. </b>Exceptions</a></li><li data-nav-id=/deployment/testing/ title="Testing the Rule Set" class=dd-item><a href=/deployment/testing/><b>5. </b>Testing</a></li><li data-nav-id=/deployment/anomaly/ title="Anomaly Scoring Mode" class="dd-item active"><a href=/deployment/anomaly/><b>6. </b>Anomaly</a></li><li data-nav-id=/deployment/support/ title="Still need help?" class=dd-item><a href=/deployment/support/><b>8. </b>Support</a></li><li data-nav-id=/deployment/making/ title=Making class=dd-item><a href=/deployment/making/><b>9. </b>Making</a></li><li data-nav-id=/deployment/metadata/ title=Metadata class=dd-item><a href=/deployment/metadata/><b>10. </b>Metadata</a></li></ul></li><li data-nav-id=/development/ title=Developments class=dd-item><a href=/development/>Developments</a><ul><li data-nav-id=/development/ruleid/ title="Rule IDs" class=dd-item><a href=/development/ruleid/><b>1. </b>Rule IDs</a></li></ul></li></ul><section id=footer><p>Built with <a href=https://github.com/matcornic/hugo-theme-learn><i class="fas fa-heart"></i></a>from <a href=https://getgrav.org>Grav</a> and <a href=https://gohugo.io/>Hugo</a></p></section></div></nav><section id=body><div id=overlay></div><div class="padding highlightable"><div><div id=top-bar><div id=top-github-link><a class=github-link title="Edit this page" href=https://github.com/coreruleset/coreruleset-documentation/deployment/anomaly.md target=blank><i class="fas fa-code-branch"></i><span id=top-github-link-text>Edit this page</span></a></div><div id=breadcrumbs itemscope itemtype=http://data-vocabulary.org/Breadcrumb><span id=sidebar-toggle-span><a href=# id=sidebar-toggle data-sidebar-toggle><i class="fas fa-bars"></i></a></span><span id=toc-menu><i class="fas fa-list-alt"></i></span><span class=links>Anomaly Scoring Mode</span></div><div class=progress><div class=wrapper><nav id=TableOfContents><ul><li><a href=#traditional-detection-mode>Traditional Detection Mode</a><ul><li><a href=#configuring-traditional-mode>Configuring Traditional Mode</a></li><li><a href=#pros-and-cons-of-traditional-detection-mode>Pros and Cons of Traditional Detection Mode</a></li></ul></li><li><a href=#anomaly-scoring-mode>Anomaly Scoring Mode</a><ul><li><a href=#configuring-anomaly-scoring-mode>Configuring Anomaly Scoring Mode</a></li><li><a href=#anomaly-scoring-severity-levels>Anomaly Scoring Severity Levels</a></li><li><a href=#enabledisable-blocking>Enable/Disable Blocking</a></li><li><a href=#pros-and-cons-of-anomaly-scoring-detection-mode>Pros and Cons of Anomaly Scoring Detection Mode</a></li></ul></li></ul></nav></div></div></div></div><div id=head-tags></div><div id=body-inner><h1>Anomaly Scoring Mode</h1><p>OWASP CRS version 3.x allows users to quickly switch between Traditional
+and Anomaly Scoring detection modes. The default starting with CRS 3.x
+is Anomaly Scoring mode. Within the csr-setup.conf.example file there
+are two settings to control which mode your CRS instance will work in.
+Within this file, you can also control the following related CRS items:</p><ul><li>Anomaly Scoring Severity Levels</li><li>Anomaly Scoring Threshold Levels (Blocking)</li><li>Enable/Disable Blocking</li><li>Choose the default logging actions</li><li>and much more!</li></ul><h2 id=traditional-detection-mode>Traditional Detection Mode</h2><p>Traditional Detection Mode (or IDS/IPS mode) is the old default
+operating mode. This is the most basic operating mode where all of the
+rules are &ldquo;self-contained&rdquo;. In this mode there is no intelligence is
+shared between rules and each rule has no information about any previous
+rule matches. That is to say, in this mode, if a rule triggers, it will
+execute any disruptive/logging actions specified on the current rule.</p><h3 id=configuring-traditional-mode>Configuring Traditional Mode</h3><p>If you want to run the CRS in Traditional mode, you can do this easily
+by modifying the SecDefaultAction directive in the csr-setup.conf file
+to use a disruptive action other than the default 'pass', such as
+deny:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache><span style=color:#75715e># Default (Anomaly Mode)</span>
+SecDefaultAction <span style=color:#e6db74>&#34;phase:2,pass,log&#34;</span>
+</code></pre></div><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache><span style=color:#75715e># Updated To Enable Traditional Mode</span>
+SecDefaultAction <span style=color:#e6db74>&#34;phase:2,deny,status:403,log&#34;</span>
+</code></pre></div><h3 id=pros-and-cons-of-traditional-detection-mode>Pros and Cons of Traditional Detection Mode</h3><p>Pros</p><ul><li>The functionality of this mode is much easier for a new user to
+understand.</li><li>Better performance (lower latency/resources) as the first disruptive
+match will stop further processing.</li></ul><p>Cons</p><ul><li>Not all rules that could have triggered will be logged, only the
+first</li><li>Not every site has the same risk tolerance</li><li>Lower severity alerts may not trigger traditional mode</li><li>Single low severity alerts may not be deemed critical enough to
+block, but multiple lower severity alerts in aggregate could be</li></ul><h2 id=anomaly-scoring-mode>Anomaly Scoring Mode</h2><p>Within anomaly scoring mode we are implementing the concept of
+Collaborative Detection and Delayed Blocking. This is to say that we
+have changed the rules logic by decoupling the inspection/detection from
+the blocking functionality. The individual rules can be run so that the
+detection remains, however instead of applying any disruptive action at
+that point, the rules will contribute to a transactional anomaly score
+collection. In addition, each rule will also store meta-data about each
+rule match (such as the Rule ID, Attack Category, Matched Location and
+Matched Data) for later logging.</p><h3 id=configuring-anomaly-scoring-mode>Configuring Anomaly Scoring Mode</h3><p>The default mode in CRS 3.x is Anomaly Scoring mode, you can verify this
+is your mode by checking that the SecDefaultAction line in the
+csr-setup.conf file usees the pass action:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecDefaultAction <span style=color:#e6db74>&#34;phase:2,pass,log&#34;</span>
+</code></pre></div><p>In this mode, each matched rule will not block, but rather will
+increment anomaly scores using ModSecurity's setvar action. Here is an
+example of an SQL Injection CRS rule that is using setvar actions to
+increase both the overall anomaly score and the SQL Injection
+sub-category score:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRule ARGS|REQUEST_COOKIES|QUERY_STRING|REQUEST_FILENAME <span style=color:#e6db74>&#34;@detectSQLi&#34;</span> \
+   <span style=color:#960050;background-color:#1e0010>&#34;</span>msg:&#39;SQL Injection Attack Detected via LibInjection&#39;,\
+   id:942100,\
+   rev:&#39;1&#39;,\
+   ver:&#39;OWASP_CRS/3.0.0&#39;,\
+   maturity:&#39;1&#39;,\
+   accuracy:&#39;8&#39;,\
+   phase:request,\
+   block,\
+   multiMatch,\
+   t:none,t:utf8toUnicode,t:urlDecodeUni,t:removeNulls,t:removeComments,\
+   capture,\
+   logdata:&#39;Matched Data: %{TX.0} found within %{MATCHED_VAR_NAME}: %{MATCHED_VAR}&#39;,\
+   tag:&#39;application-multi&#39;,\
+   tag:&#39;language-multi&#39;,\
+   tag:&#39;platform-multi&#39;,\
+   tag:&#39;attack-sqli&#39;,\
+   tag:&#39;OWASP_CRS/WEB_ATTACK/SQL_INJECTION&#39;,\
+   tag:&#39;WASCTC/WASC-19&#39;,\
+   tag:&#39;OWASP_TOP_10/A1&#39;,\
+   tag:&#39;OWASP_AppSensor/CIE1&#39;,\
+   tag:&#39;PCI/6.5.2&#39;,\
+   setvar:tx.anomaly_score=+%{tx.critical_anomaly_score},\
+   setvar:tx.sql_injection_score=+%{tx.critical_anomaly_score},\
+   setvar:&#39;tx.msg=%{rule.msg}&#39;,setvar:tx.%{rule.id}-OWASP_CRS/WEB_ATTACK/SQL_INJECTION-%{matched_var_name}=%{matched_var}<span style=color:#960050;background-color:#1e0010>&#34;</span>
+</code></pre></div><h3 id=anomaly-scoring-severity-levels>Anomaly Scoring Severity Levels</h3><p>Each rule has a severity level specified. We have updated the rules to
+allow for the anomaly score collection incrementation to use macro
+expansion. Below is a snippet from the above rule (id:942100) where that
+occurs:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache><span style=color:#960050;background-color:#1e0010>setvar:tx</span>.<span style=color:#960050;background-color:#1e0010>anomaly_score=+%{tx</span>.<span style=color:#960050;background-color:#1e0010>critical_anomaly_score},\</span>
+<span style=color:#960050;background-color:#1e0010>setvar:tx</span>.<span style=color:#960050;background-color:#1e0010>sql_injection_score=+%{tx</span>.<span style=color:#960050;background-color:#1e0010>critical_anomaly_score},\</span>
+</code></pre></div><p>This adds a variable amount, tx.critical_anomaly_score, to the current
+anomaly scores. The user can configure what each score represents from
+within the csr-setup.conf file and these scores will be propagated out
+for use in the rules by using macro expansion. The following is an
+excerpt from csr-setup.conf where that configuration is set:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache><span style=color:#75715e>#</span>
+<span style=color:#75715e># -=[ Anomaly Scoring Severity Levels ]=-</span>
+<span style=color:#75715e>#</span>
+<span style=color:#75715e># These are the default scoring points for each severity level.  You may</span>
+<span style=color:#75715e># adjust these to you liking.  These settings will be used in macro expansion</span>
+<span style=color:#75715e># in the rules to increment the anomaly scores when rules match.</span>
+<span style=color:#75715e>#</span>
+<span style=color:#75715e># These are the default Severity ratings (with anomaly scores) of the individual rules -</span>
+<span style=color:#75715e>#</span>
+<span style=color:#75715e>#    - 2: Critical - Anomaly Score of 5.</span>
+<span style=color:#75715e>#         Is the highest severity level possible without correlation.  It is</span>
+<span style=color:#75715e>#         normally generated by the web attack rules (40 level files).</span>
+<span style=color:#75715e>#    - 3: Error - Anomaly Score of 4.</span>
+<span style=color:#75715e>#         Is generated mostly from outbound leakage rules (50 level files).</span>
+<span style=color:#75715e>#    - 4: Warning - Anomaly Score of 3.</span>
+<span style=color:#75715e>#         Is generated by malicious client rules (35 level files).</span>
+<span style=color:#75715e>#    - 5: Notice - Anomaly Score of 2.</span>
+<span style=color:#75715e>#         Is generated by the Protocol policy and anomaly files.</span>
+<span style=color:#75715e>#</span>
+<span style=color:#960050;background-color:#1e0010>setvar:tx</span>.<span style=color:#960050;background-color:#1e0010>critical_anomaly_score=5,</span> <span style=color:#960050;background-color:#1e0010>\</span>
+<span style=color:#960050;background-color:#1e0010>setvar:tx</span>.<span style=color:#960050;background-color:#1e0010>error_anomaly_score=4,</span> <span style=color:#960050;background-color:#1e0010>\</span>
+<span style=color:#960050;background-color:#1e0010>setvar:tx</span>.<span style=color:#960050;background-color:#1e0010>warning_anomaly_score=3,</span> <span style=color:#960050;background-color:#1e0010>\</span>
+<span style=color:#960050;background-color:#1e0010>setvar:tx</span>.<span style=color:#960050;background-color:#1e0010>notice_anomaly_score=2&#34;</span>
+</code></pre></div><p>This configuration would mean that every CRS rule that has a Severity
+rating of "Critical" would increase the transactional anomaly score by
+5 points per rule match. When we have a rule match, you can see how the
+anomaly scoring works from within the modsec_debug.log file:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>...
+Setting variable: tx.sql_injection_score=+%{tx.critical_anomaly_score}
+Recorded original collection variable: tx.sql_injection_score = &#34;0&#34;
+Resolved macro %{tx.critical_anomaly_score} to: 5
+Relative change: sql_injection_score=0+5
+Set variable &#34;tx.sql_injection_score&#34; to &#34;5&#34;.
+Setting variable: tx.anomaly_score=+%{tx.critical_anomaly_score}
+Recorded original collection variable: tx.anomaly_score = &#34;0&#34;
+Resolved macro %{tx.critical_anomaly_score} to: 5
+Relative change: anomaly_score=0+5
+Set variable &#34;tx.anomaly_score&#34; to &#34;5&#34;.
+...
+</code></pre></div><p>Now that we have the capability to do anomaly scoring, the next step is
+to set our thresholds. This is the score value at which, if the current
+transactional score is above, it will be denied. We have various
+different anomaly scoring thresholds to set for both specific
+vulnerability types and generic requests/response levels. These will be
+evaluated in two different files. Inbound request are evaluated at the
+end of phase:2 in the rules/REQUEST-49-BLOCKING-EVALUATION.conf file and
+outbound responses are evaluated at the end of phase:4 in the
+rules/RESPONSE-59-BLOCKING-EVALUATION.conf file. The thresholds are
+configured in the csr-setup.conf file.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecAction \
+ <span style=color:#960050;background-color:#1e0010>&#34;</span>id:&#39;900003&#39;,\
+  phase:1,\
+  nolog,\
+  pass,\
+  t:none,\
+  setvar:tx.sql_injection_score_threshold=15,\
+  setvar:tx.xss_score_threshold=15,\
+  setvar:tx.rfi_score_threshold=5,\
+  setvar:tx.lfi_score_threshold=5,\
+  setvar:tx.rce_score_threshold=5,\
+  setvar:tx.command_injection_score_threshold=5,\
+  setvar:tx.php_injection_score_threshold=5,\
+  setvar:tx.http_violation_score_threshold=5,\
+  setvar:tx.trojan_score_threshold=5,\
+  setvar:tx.session_fixation_score_threshold=5,\
+  setvar:tx.inbound_anomaly_score_threshold=5,\
+  setvar:tx.outbound_anomaly_score_threshold=4<span style=color:#960050;background-color:#1e0010>&#34;</span>
+</code></pre></div><p>With these current default settings, anomaly scoring mode will act
+similarly to traditional mode from a blocking perspective. Since all
+critical level rules increase the anomaly score by 5 points, this means
+that even 1 critical level rule match will cause a block. If you want to
+adjust the anomaly score so that you have a lower chance of blocking
+non-malicious clients (false positives) you could raise the
+tx.inbound_anomaly_score_level settings to something higher like 10
+or 15. This would mean that two or more critical severity rules have
+matched before you decide to block. Another advantage of this approach
+is that you could aggregate multiple lower severity rule matches and
+then decide to block. So, one lower severity rule match (such as missing
+a Request Header such as Accept) would not result in a block but if
+multiple anomalies are triggered then the request would be blocked.</p><h3 id=enabledisable-blocking>Enable/Disable Blocking</h3><p>You are probably familiar with the SecRuleEngine directive which allows
+you to control blocking mode (On) vs. Detection mode (DetectionOnly).
+With the Anomaly Scoring mode, if you want to allow blocking, you should
+set the SecRueEngine to On and then uncomment the following SecAction in
+the csr-setup.conf file. Note: this is done by default in CRS 3.x:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecAction \
+ <span style=color:#960050;background-color:#1e0010>&#34;</span>id:&#39;900004&#39;,\
+  phase:1,\
+  nolog,\
+  pass,\
+  t:none,\
+  setvar:tx.anomaly_score_blocking=on<span style=color:#960050;background-color:#1e0010>&#34;</span>
+</code></pre></div><p>When this rule is enabled, The rule within the
+rules/REQUEST-49-BLOCKING-EVALUATION.conf and
+rules/RESPONSE-59-BLOCKING-EVALUATION.conf files will evaluate the
+anomaly scores at the end of the request/response phases and will block
+the request if it exceeds a given anomaly threshold. An example of such
+a rule is as follows:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRule TX:ANOMALY_SCORE <span style=color:#e6db74>&#34;@ge %{tx.inbound_anomaly_score_threshold}&#34;</span> \
+    <span style=color:#960050;background-color:#1e0010>&#34;</span>msg:&#39;Inbound Anomaly Score Exceeded (Total Score: %{TX.ANOMALY_SCORE}, Last Matched Message: %{tx.msg}&#39;,\
+    severity:CRITICAL,\
+    phase:request,\
+    id:949190,\
+    t:none,\
+    deny,\
+    log,\
+    tag:&#39;application-multi&#39;,\
+    tag:&#39;language-multi&#39;,\
+    tag:&#39;platform-multi&#39;,\
+    tag:&#39;attack-generic&#39;,\
+    setvar:tx.inbound_tx_msg=%{tx.msg},\
+    setvar:tx.inbound_anomaly_score=%{tx.anomaly_score},\
+    chain<span style=color:#e6db74>&#34;
+</span><span style=color:#e6db74>        SecRule TX:ANOMALY_SCORE_BLOCKING &#34;</span>@streq <span style=color:#66d9ef>on</span><span style=color:#e6db74>&#34; chain
+</span><span style=color:#e6db74>            SecRule TX:/^\d+\-/ &#34;</span>(.*)<span style=color:#960050;background-color:#1e0010>&#34;</span>
+</code></pre></div><p>Notice that there is an explicit deny within this rule. This explitly
+listed disruptive action will override the default action of pass
+(within anomaly mode)and block the transaction. If you would like a
+different action to occur you would set it within the two
+BLOCKING-EVALUATION files.</p><h3 id=pros-and-cons-of-anomaly-scoring-detection-mode>Pros and Cons of Anomaly Scoring Detection Mode</h3><p>Pros</p><ul><li>An increased confidence in blocking - since more detection rules
+contribute to the anomaly score, the higher the score, the more
+confidence you can have in blocking malicious transactions.</li><li>Allows users to set a threshold that is appropriate for them -
+different sites may have different thresholds for blocking.</li><li>Allows several low severity events to trigger alerts while
+individual ones are suppressed.</li><li>One correlated event helps alert management.</li><li>Exceptions may be handled by either increasing the overall anomaly
+score threshold, or by adding local custom exceptions file</li></ul><p>Cons</p><ul><li>More complex for the average user.</li><li>Log monitoring scripts may need to be updated for proper analysis</li></ul><footer class=footline></footer></div></div><div id=navigation><a class="nav nav-prev" href=/deployment/testing/ title="Testing the Rule Set"><i class="fa fa-chevron-left"></i></a><a class="nav nav-next" href=/deployment/support/ title="Still need help?" style=margin-right:0><i class="fa fa-chevron-right"></i></a></div></section><div style=left:-1000px;overflow:scroll;position:absolute;top:-1000px;border:none;box-sizing:content-box;height:200px;margin:0;padding:0;width:200px><div style=border:none;box-sizing:content-box;height:200px;margin:0;padding:0;width:200px></div></div><script src=/js/clipboard.min.js?1592185552></script><script src=/js/perfect-scrollbar.min.js?1592185552></script><script src=/js/perfect-scrollbar.jquery.min.js?1592185552></script><script src=/js/jquery.sticky.js?1592185552></script><script src=/js/featherlight.min.js?1592185552></script><script src=/js/highlight.pack.js?1592185552></script><script>hljs.initHighlightingOnLoad();</script><script src=/js/modernizr.custom-3.6.0.js?1592185552></script><script src=/js/learn.js?1592185552></script><script src=/js/hugo-learn.js?1592185552></script><link href=/mermaid/mermaid.css?1592185552 rel=stylesheet><script src=/mermaid/mermaid.js?1592185552></script><script>mermaid.initialize({startOnLoad:true});</script></body></html>

@@ -1,0 +1,112 @@
+<!doctype html><html lang=en class="js csstransforms3d"><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=generator content="Hugo 0.71.1"><meta name=description content="CoreRuleSet Documentation"><meta name=author content="CoreRuleSet"><link rel=icon href=/images/favicon.png type=image/png><title>Rules :: Core Rule Set Documentation</title><link href=/css/nucleus.css?1592185552 rel=stylesheet><link href=/css/fontawesome-all.min.css?1592185552 rel=stylesheet><link href=/css/hybrid.css?1592185552 rel=stylesheet><link href=/css/featherlight.min.css?1592185552 rel=stylesheet><link href=/css/perfect-scrollbar.min.css?1592185552 rel=stylesheet><link href=/css/auto-complete.css?1592185552 rel=stylesheet><link href=/css/atom-one-dark-reasonable.css?1592185552 rel=stylesheet><link href=/css/theme.css?1592185552 rel=stylesheet><link href=/css/hugo-theme.css?1592185552 rel=stylesheet><link href=/css/theme-blue.css?1592185552 rel=stylesheet><link href=/css/foo.css?1592185552 rel=stylesheet><link href=/css/bar.css?1592185552 rel=stylesheet><script src=/js/jquery-3.3.1.min.js?1592185552></script><style>:root #header+#content>#left>#rlblock_left{display:none!important}</style></head><body data-url=/deployment/rules/><nav id=sidebar><div id=header-wrapper><div id=header><a id=logo href=/><img src=//images/logo.png></a></div><div class=searchbox><label for=search-by><i class="fas fa-search"></i></label><input data-search-input id=search-by type=search placeholder=Search...>
+<span data-search-clear><i class="fas fa-times"></i></span></div><script type=text/javascript src=/js/lunr.min.js?1592185552></script><script type=text/javascript src=/js/auto-complete.js?1592185552></script><script type=text/javascript>var baseurl="\/";</script><script type=text/javascript src=/js/search.js?1592185552></script></div><div class=highlightable><ul class=topics><li data-nav-id=/deployment/ title="OWASP CRS Quickstart" class="dd-item
+parent"><a href=/deployment/>Deployment</a><ul><li data-nav-id=/deployment/install/ title="Installing CoreRuleSet" class=dd-item><a href=/deployment/install/><b>1. </b>Install</a></li><li data-nav-id=/deployment/configuration/ title=Configuration class=dd-item><a href=/deployment/configuration/><b>2. </b>Configuration</a></li><li data-nav-id=/deployment/rules/ title=Rules class="dd-item active"><a href=/deployment/rules/><b>3. </b>Rules</a></li><li data-nav-id=/deployment/exceptions/ title="Adding Exceptions and Tuning CRS" class=dd-item><a href=/deployment/exceptions/><b>4. </b>Exceptions</a></li><li data-nav-id=/deployment/testing/ title="Testing the Rule Set" class=dd-item><a href=/deployment/testing/><b>5. </b>Testing</a></li><li data-nav-id=/deployment/anomaly/ title="Anomaly Scoring Mode" class=dd-item><a href=/deployment/anomaly/><b>6. </b>Anomaly</a></li><li data-nav-id=/deployment/support/ title="Still need help?" class=dd-item><a href=/deployment/support/><b>8. </b>Support</a></li><li data-nav-id=/deployment/making/ title=Making class=dd-item><a href=/deployment/making/><b>9. </b>Making</a></li><li data-nav-id=/deployment/metadata/ title=Metadata class=dd-item><a href=/deployment/metadata/><b>10. </b>Metadata</a></li></ul></li><li data-nav-id=/development/ title=Developments class=dd-item><a href=/development/>Developments</a><ul><li data-nav-id=/development/ruleid/ title="Rule IDs" class=dd-item><a href=/development/ruleid/><b>1. </b>Rule IDs</a></li></ul></li></ul><section id=footer><p>Built with <a href=https://github.com/matcornic/hugo-theme-learn><i class="fas fa-heart"></i></a>from <a href=https://getgrav.org>Grav</a> and <a href=https://gohugo.io/>Hugo</a></p></section></div></nav><section id=body><div id=overlay></div><div class="padding highlightable"><div><div id=top-bar><div id=top-github-link><a class=github-link title="Edit this page" href=https://github.com/coreruleset/coreruleset-documentation/deployment/rules.md target=blank><i class="fas fa-code-branch"></i><span id=top-github-link-text>Edit this page</span></a></div><div id=breadcrumbs itemscope itemtype=http://data-vocabulary.org/Breadcrumb><span id=sidebar-toggle-span><a href=# id=sidebar-toggle data-sidebar-toggle><i class="fas fa-bars"></i></a></span><span id=toc-menu><i class="fas fa-list-alt"></i></span><span class=links>Rules</span></div><div class=progress><div class=wrapper><nav id=TableOfContents></nav></div></div></div></div><div id=head-tags></div><div id=body-inner><h1>Rules</h1><h1 id=whats-in-the-rules>What&rsquo;s In The Rules</h1><p>| <strong>REQUEST-00-LOCAL-WHITELIST.conf.example</strong>
+|  Configuration Path:
+<code>owasp-modsecurity-crs/rules/REQUEST-00-LOCAL-WHITELIST.conf.example</code>
+| This file is used to add LOCAL exceptions for your site. Often in this
+file we would see rules that short-circuit inspection and allow
+certain transactions to skip through inspection.
+| <code>Example: SecRule REMOTE_ADDR "@ipMatch 192.168.1.100" "phase:1,id:'981033',t:none,nolog,pass,ctl:ruleEngine=Off"</code></p><p>| <strong>REQUEST-01-COMMON-EXCEPTIONS</strong>
+| Configuration Path:
+owasp-modsecurity-crs/rules/REQUEST-01-COMMON-EXCEPTIONS.conf
+|
+| Some rules are quite prone to causing false positives in well
+established software, such as Apache callbacks or Google Analytics
+tracking cookie. This file offers rules that will allow the
+transactions to avoid triggering these false positives.</p><p>| <strong>REQUEST-10-IP-REPUTATION</strong>
+| Configuration Path:
+owasp-modsecurity-crs/rules/REQUEST-10-IP-REPUTATION.conf
+|
+| These rules deal with detecting traffic from IPs that have previously
+been involved with malicious activity, either on our local site or
+globally.</p><p>| <strong>REQUEST-12-DOS-PROTECTION</strong>
+| Configuration Path:
+owasp-modsecurity-crs/rules/REQUEST-12-DOS-PROTECTION.conf
+|
+| The rules in this file will attempt to detect some level 7 DoS (Denial
+of Service) attacks against your server.</p><p>| <strong>REQUEST-13-SCANNER-DETECTION</strong>
+| Configuration Path:
+owasp-modsecurity-crs/rules/REQUEST-13-SCANNER-DETECTION.conf
+|
+| These rules are concentrated around detecting security tools and
+scanners.</p><p>| <strong>REQUEST-20-PROTOCOL-ENFORCEMENT</strong>
+| Configuration Path:
+owasp-modsecurity-crs/rules/REQUEST-20-PROTOCOL-ENFORCEMENT.conf
+|
+| The rules in this file center around detecting requests that either
+violate HTTP or represent a request that no modern browser would
+generate, for instance missing a user-agent.</p><p>| <strong>REQUEST-21-PROTOCOL-ATTACK</strong>
+|
+| Configuration Path:
+owasp-modsecurity-crs/rules/REQUEST-21-PROTOCOL-ATTACK.conf
+| The rules in this file focus on specific attacks against the HTTP
+protocol itself such as HTTP Request Smuggling and Response Splitting.</p><p>| <strong>REQUEST-30-APPLICATION-ATTACK-LFI</strong>
+|
+| Configuration Path:
+owasp-modsecurity-crs/rules/REQUEST-30-APPLICATION-ATTACK-LFI.conf
+| These rules attempt to detect when a user is trying to include a file
+that would be local to the webserver that they should not have access
+to. Exploiting this type of attack can lead to the web application or
+server being compromised.</p><p>| <strong>REQUEST-31-APPLICATION-ATTACK-RFI</strong>
+| Configuration Path:
+owasp-modsecurity-crs/rules/REQUEST-31-APPLICATION-ATTACK-RFI.conf
+|
+| These rules attempt to detect when a user is trying to include a
+remote resource into the web application that will be executed.
+Exploiting this type of attack can lead to the web application or
+server being compromised.</p><p>| <strong>REQUEST-41-APPLICATION-ATTACK-SQLI</strong>
+| Configuration Path:
+owasp-modsecurity-crs/rules/REQUEST-41-APPLICATION-ATTACK-SQLI.conf
+|
+| Within this configuration file we provide rules that protect against
+SQL injection attacks. SQLi attackers occur when an attacker passes
+crafted control characters to parameters to an area of the application
+that is expecting only data. The application will then pass the
+control characters to the database. This will end up changing the
+meaning of the expected SQL query.</p><p>| <strong>REQUEST-43-APPLICATION-ATTACK-SESSION-FIXATION</strong>
+| Configuration Path:
+owasp-modsecurity-crs/rules/REQUEST-43-APPLICATION-ATTACK-SESSION-FIXATION.conf
+|
+| These rules focus around providing protection against Session Fixation
+attacks.</p><p>| <strong>REQUEST-49-BLOCKING-EVALUATION</strong>
+| Configuration Path:
+owasp-modsecurity-crs/rules/REQUEST-49-BLOCKING-EVALUATION.conf
+|
+| These rules provide the anomaly based blocking for a given request. If
+you are in anomaly detection mode this file must not be deleted.</p><p>| <strong>RESPONSE-50-DATA-LEAKAGES-IIS</strong>
+| Configuration Path:
+owasp-modsecurity-crs/rules/RESPONSE-50-DATA-LEAKAGES-IIS.conf
+|
+| These rules provide protection against data leakages that may occur
+because of Microsoft IIS</p><p>| <strong>RESPONSE-50-DATA-LEAKAGES-JAVA</strong>
+| Configuration Path:
+owasp-modsecurity-crs/rules/RESPONSE-50-DATA-LEAKAGES-JAVA.conf
+|
+| These rules provide protection against data leakages that may occur
+because of Java</p><p>| <strong>RESPONSE-50-DATA-LEAKAGES-PHP</strong>
+| Configuration Path:
+owasp-modsecurity-crs/rules/RESPONSE-50-DATA-LEAKAGES-PHP.conf
+|
+| These rules provide protection against data leakages that may occur
+because of PHP</p><p>| <strong>RESPONSE-50-DATA-LEAKAGES</strong>
+| Configuration Path:
+owasp-modsecurity-crs/rules/RESPONSE-50-DATA-LEAKAGES.conf
+|
+| These rules provide protection against data leakages that may occur
+genericly</p><p>| <strong>RESPONSE-51-DATA-LEAKAGES-SQL</strong>
+| Configuration Path:
+owasp-modsecurity-crs/rules/RESPONSE-51-DATA-LEAKAGES-SQL.conf
+|
+| These rules provide protection against data leakages that may occur
+from backend SQL servers. Often these are indicative of SQL injection
+issues being present.</p><p>| <strong>RESPONSE-59-BLOCKING-EVALUATION</strong>
+| Configuration Path:
+owasp-modsecurity-crs/rules/RESPONSE-59-BLOCKING-EVALUATION.conf
+|
+| These rules provide the anomaly based blocking for a given response.
+If you are in anomaly detection mode this file must not be deleted.</p><p>| <strong>RESPONSE-80-CORRELATION</strong>
+| Configuration Path:
+owasp-modsecurity-crs/rules/RESPONSE-80-CORRELATION.conf
+|
+| The rules in this configuration file facilitate the gathering of data
+about successful and unsuccessful attacks on the server.</p><footer class=footline></footer></div></div><div id=navigation><a class="nav nav-prev" href=/deployment/configuration/ title=Configuration><i class="fa fa-chevron-left"></i></a><a class="nav nav-next" href=/deployment/exceptions/ title="Adding Exceptions and Tuning CRS" style=margin-right:0><i class="fa fa-chevron-right"></i></a></div></section><div style=left:-1000px;overflow:scroll;position:absolute;top:-1000px;border:none;box-sizing:content-box;height:200px;margin:0;padding:0;width:200px><div style=border:none;box-sizing:content-box;height:200px;margin:0;padding:0;width:200px></div></div><script src=/js/clipboard.min.js?1592185552></script><script src=/js/perfect-scrollbar.min.js?1592185552></script><script src=/js/perfect-scrollbar.jquery.min.js?1592185552></script><script src=/js/jquery.sticky.js?1592185552></script><script src=/js/featherlight.min.js?1592185552></script><script src=/js/highlight.pack.js?1592185552></script><script>hljs.initHighlightingOnLoad();</script><script src=/js/modernizr.custom-3.6.0.js?1592185552></script><script src=/js/learn.js?1592185552></script><script src=/js/hugo-learn.js?1592185552></script><link href=/mermaid/mermaid.css?1592185552 rel=stylesheet><script src=/mermaid/mermaid.js?1592185552></script><script>mermaid.initialize({startOnLoad:true});</script></body></html>

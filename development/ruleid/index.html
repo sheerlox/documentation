@@ -1,0 +1,83 @@
+<!doctype html><html lang=en class="js csstransforms3d"><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=generator content="Hugo 0.71.1"><meta name=description content="CoreRuleSet Documentation"><meta name=author content="CoreRuleSet"><link rel=icon href=/images/favicon.png type=image/png><title>Rule IDs :: Core Rule Set Documentation</title><link href=/css/nucleus.css?1592185552 rel=stylesheet><link href=/css/fontawesome-all.min.css?1592185552 rel=stylesheet><link href=/css/hybrid.css?1592185552 rel=stylesheet><link href=/css/featherlight.min.css?1592185552 rel=stylesheet><link href=/css/perfect-scrollbar.min.css?1592185552 rel=stylesheet><link href=/css/auto-complete.css?1592185552 rel=stylesheet><link href=/css/atom-one-dark-reasonable.css?1592185552 rel=stylesheet><link href=/css/theme.css?1592185552 rel=stylesheet><link href=/css/hugo-theme.css?1592185552 rel=stylesheet><link href=/css/theme-blue.css?1592185552 rel=stylesheet><link href=/css/foo.css?1592185552 rel=stylesheet><link href=/css/bar.css?1592185552 rel=stylesheet><script src=/js/jquery-3.3.1.min.js?1592185552></script><style>:root #header+#content>#left>#rlblock_left{display:none!important}</style></head><body data-url=/development/ruleid/><nav id=sidebar><div id=header-wrapper><div id=header><a id=logo href=/><img src=//images/logo.png></a></div><div class=searchbox><label for=search-by><i class="fas fa-search"></i></label><input data-search-input id=search-by type=search placeholder=Search...>
+<span data-search-clear><i class="fas fa-times"></i></span></div><script type=text/javascript src=/js/lunr.min.js?1592185552></script><script type=text/javascript src=/js/auto-complete.js?1592185552></script><script type=text/javascript>var baseurl="\/";</script><script type=text/javascript src=/js/search.js?1592185552></script></div><div class=highlightable><ul class=topics><li data-nav-id=/deployment/ title="OWASP CRS Quickstart" class=dd-item><a href=/deployment/>Deployment</a><ul><li data-nav-id=/deployment/install/ title="Installing CoreRuleSet" class=dd-item><a href=/deployment/install/><b>1. </b>Install</a></li><li data-nav-id=/deployment/configuration/ title=Configuration class=dd-item><a href=/deployment/configuration/><b>2. </b>Configuration</a></li><li data-nav-id=/deployment/rules/ title=Rules class=dd-item><a href=/deployment/rules/><b>3. </b>Rules</a></li><li data-nav-id=/deployment/exceptions/ title="Adding Exceptions and Tuning CRS" class=dd-item><a href=/deployment/exceptions/><b>4. </b>Exceptions</a></li><li data-nav-id=/deployment/testing/ title="Testing the Rule Set" class=dd-item><a href=/deployment/testing/><b>5. </b>Testing</a></li><li data-nav-id=/deployment/anomaly/ title="Anomaly Scoring Mode" class=dd-item><a href=/deployment/anomaly/><b>6. </b>Anomaly</a></li><li data-nav-id=/deployment/support/ title="Still need help?" class=dd-item><a href=/deployment/support/><b>8. </b>Support</a></li><li data-nav-id=/deployment/making/ title=Making class=dd-item><a href=/deployment/making/><b>9. </b>Making</a></li><li data-nav-id=/deployment/metadata/ title=Metadata class=dd-item><a href=/deployment/metadata/><b>10. </b>Metadata</a></li></ul></li><li data-nav-id=/development/ title=Developments class="dd-item
+parent"><a href=/development/>Developments</a><ul><li data-nav-id=/development/ruleid/ title="Rule IDs" class="dd-item active"><a href=/development/ruleid/><b>1. </b>Rule IDs</a></li></ul></li></ul><section id=footer><p>Built with <a href=https://github.com/matcornic/hugo-theme-learn><i class="fas fa-heart"></i></a>from <a href=https://getgrav.org>Grav</a> and <a href=https://gohugo.io/>Hugo</a></p></section></div></nav><section id=body><div id=overlay></div><div class="padding highlightable"><div><div id=top-bar><div id=top-github-link><a class=github-link title="Edit this page" href=https://github.com/coreruleset/coreruleset-documentation/development/ruleid.md target=blank><i class="fas fa-code-branch"></i><span id=top-github-link-text>Edit this page</span></a></div><div id=breadcrumbs itemscope itemtype=http://data-vocabulary.org/Breadcrumb><span id=sidebar-toggle-span><a href=# id=sidebar-toggle data-sidebar-toggle><i class="fas fa-bars"></i></a></span><span id=toc-menu><i class="fas fa-list-alt"></i></span><span class=links>Rule IDs</span></div><div class=progress><div class=wrapper><nav id=TableOfContents><ul><li><a href=#why-do-rule-ids-matter>Why do rule IDs matter?</a><ul><li><a href=#id-reservations>ID Reservations</a></li></ul></li><li><a href=#ids-in-the-owasp-crs>IDs in the OWASP CRS</a></li><li><a href=#mapping-300-dev2x-ids-to-300-rc1-ids>Mapping 3.0.0-dev(2.x) IDs to 3.0.0-rc1 IDs</a></li></ul></nav></div></div></div></div><div id=head-tags></div><div id=body-inner><h1>Rule IDs</h1><h2 id=why-do-rule-ids-matter>Why do rule IDs matter?</h2><p>Each rule added to a ModSecurity instance must have a unique ID (in
+recent versions of modsec). As a result of this it is important that IDs
+be generated in a preplanned way such that they don't overlap with
+other rules. This becomes particularly important when it comes to
+rulesets, like OWASP CRS. Because CRS can be used with other rule sets
+(in fact it is designed to be used with the Trustwave commercial rules,
+for instance) it is important that no two rulesets have overlapping ID
+ranges. To aid in this process the project maintains a list of reserved
+ID spaces. If you are planning on publishing rules or a ruleset please
+reach out to security[ at ]modsecurity.org and we can reserve a range
+of IDs for you thank you.</p><h3 id=id-reservations>ID Reservations</h3><ul><li>1-99,999; reserved for local (internal) use. Use as you see fit but
+do not use this range for rules that are distributed to others.</li><li>100,000&ndash;199,999; reserved for rules published by Oracle.</li><li>200,000&ndash;299,999; reserved for rules published Comodo.</li><li>300,000-399,999; reserved for rules published at gotroot.com.</li><li>400,000&ndash;419,999; unused (available for reservation).</li><li>420,000-429,999; reserved for ScallyWhack .</li><li>430,000&ndash;439,999: reserved for rules published by Flameeyes</li><li>440,000-599,999; unused (available for reservation).</li><li>600,000-699,999; reserved for use by Akamai
+<a href=http://www.akamai.com/html/solutions/waf.html>http://www.akamai.com/html/solutions/waf.html</a></li><li>700,000-799,999; reserved for Ivan Ristic.</li><li>900,000-999,999; reserved for the OWASP ModSecurity Core Rule Set
+project.</li><li>1,000,000-1,009,999; reserved for rules published by Redhat Security
+Team</li><li>1,010,000-1,999,999; unused (available for reservation)</li><li>2,000,000-2,999,999; reserved for rules from Trustwave's SpiderLabs
+Research team</li><li>3,000,000-3,999,999; reserved for use by Akamai</li><li>4,000,000-4,099,999; reserved in use by AviNetworks</li><li>4,100,000-4,199,999; reserved in use by Fastly</li><li>4,200,000 and above; unused (available for reservation)</li></ul><h2 id=ids-in-the-owasp-crs>IDs in the OWASP CRS</h2><p>ID's within the OWASP Core Rule Set (CRS) have special meaning. Rules
+are assigned an ID based on their location within the ruleset. As the
+list above notes, the OWASP Core Rule Set is assigned ID's from 900,000
+to 999,999. This means that each rule file in CRS 3.x has 1000 IDs
+reserved for it. Currently, this is more than enough space, however, if
+at some point this becomes a problem we'll cross that bridge when we
+come to it. By design rules will always be separated by 10 IDs from the
+ID before it. The first 10 ID's (000
+010,020,030,040,050,060,070,080,090) are designated for control flow
+related rules, that is typically rules that will trigger a skip action
+(these will be at the beginning of a file or rules that pass). As a
+result of this structure most rule files will start with ID
+9[File_ID]100. As new rules are developed they should be added at the
+end. If it becomes necessary to add a rule in-between existing rules
+this must be noted in the comments.</p><h2 id=mapping-300-dev2x-ids-to-300-rc1-ids>Mapping 3.0.0-dev(2.x) IDs to 3.0.0-rc1 IDs</h2><p>When we started developing CRS 3 we started with our old ModSecurity 2.x
+rules and used our experience to redesign the layout of the ruleset,
+refine rules that were failing, and add new controls that were needed.
+As a result of this in pre-release version of 3.x we ran into problems
+where rule IDs were all of the place. Not only was this confusing but it
+restricted the ability to do range based ID exclusions easily. As a
+result we re-structured the rule ID's to what we see above.</p><p>However, this is problematic for people who have made exceptions based
+on these existing rules. For these people we provide the following
+table:</p><p>See
+<code>2.x to 3.x Rule ID Transition Table &lt;_downloads/IdNumbering.csv></code>{.interpreted-text
+role="download&rdquo;}.</p><p>You can use the above file along with a script similar to the one below
+to update exclusions or rule changes:</p><pre><code class=language-{.python} data-lang={.python}>#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import csv
+import argparse
+import os
+import sys
+
+idTranslationFile = &quot;IdNumbering.csv&quot;
+
+if(not os.path.isfile(idTranslationFile)):
+    sys.stderr.write(&quot;We were unable to locate the ID translation CSV (idNumbering.csv) please place this is the same directory as this script\n&quot;)
+    sys.exit(1)
+parser = argparse.ArgumentParser(description=&quot;A program that takes in an exceptions file and renumbers all the ID to match OWASP CRS 3.0-rc1 numbers. Output will be directed to STDOUT and can be used to overwrite the file using '&gt;'&quot;)
+parser.add_argument(&quot;-f&quot;, &quot;--file&quot;, required=True, action=&quot;store&quot;, dest=&quot;fname&quot;, help=&quot;the file to be renumbered&quot;)
+args = parser.parse_args()
+if(not os.path.isfile((args.fname).encode('utf8'))):
+    sys.stderr.write(&quot;We were unable to find the file you were trying to upate the ID numbers in, please check your path\n&quot;)
+    sys.exit(1)
+fcontent = &quot;&quot;
+try:
+    f = open((args.fname).encode('utf-8'), &quot;r&quot;)
+    try:
+        fcontent = f.read()
+    finally:
+        f.close()
+except IOError:
+    sys.stderr.write(&quot;There was an error opening the file you were trying to update&quot;)
+
+if(fcontent != &quot;&quot;):
+    # CSV File
+    f = open(idTranslationFile, 'rt')
+    try:
+        reader = csv.reader(f)
+        for row in reader:
+            fcontent.replace(row[0], row[1])
+    finally:
+        f.close()
+
+print fcontent
+</code></pre><footer class=footline></footer></div></div><div id=navigation><a class="nav nav-prev" href=/development/ title=Developments><i class="fa fa-chevron-left"></i></a><a class="nav nav-next" href=/deployment/ title="OWASP CRS Quickstart" style=margin-right:0><i class="fa fa-chevron-right"></i></a></div></section><div style=left:-1000px;overflow:scroll;position:absolute;top:-1000px;border:none;box-sizing:content-box;height:200px;margin:0;padding:0;width:200px><div style=border:none;box-sizing:content-box;height:200px;margin:0;padding:0;width:200px></div></div><script src=/js/clipboard.min.js?1592185552></script><script src=/js/perfect-scrollbar.min.js?1592185552></script><script src=/js/perfect-scrollbar.jquery.min.js?1592185552></script><script src=/js/jquery.sticky.js?1592185552></script><script src=/js/featherlight.min.js?1592185552></script><script src=/js/highlight.pack.js?1592185552></script><script>hljs.initHighlightingOnLoad();</script><script src=/js/modernizr.custom-3.6.0.js?1592185552></script><script src=/js/learn.js?1592185552></script><script src=/js/hugo-learn.js?1592185552></script><link href=/mermaid/mermaid.css?1592185552 rel=stylesheet><script src=/mermaid/mermaid.js?1592185552></script><script>mermaid.initialize({startOnLoad:true});</script></body></html>

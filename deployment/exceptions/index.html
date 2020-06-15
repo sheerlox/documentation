@@ -1,0 +1,123 @@
+<!doctype html><html lang=en class="js csstransforms3d"><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=generator content="Hugo 0.71.1"><meta name=description content="CoreRuleSet Documentation"><meta name=author content="CoreRuleSet"><link rel=icon href=/images/favicon.png type=image/png><title>Adding Exceptions and Tuning CRS :: Core Rule Set Documentation</title><link href=/css/nucleus.css?1592185552 rel=stylesheet><link href=/css/fontawesome-all.min.css?1592185552 rel=stylesheet><link href=/css/hybrid.css?1592185552 rel=stylesheet><link href=/css/featherlight.min.css?1592185552 rel=stylesheet><link href=/css/perfect-scrollbar.min.css?1592185552 rel=stylesheet><link href=/css/auto-complete.css?1592185552 rel=stylesheet><link href=/css/atom-one-dark-reasonable.css?1592185552 rel=stylesheet><link href=/css/theme.css?1592185552 rel=stylesheet><link href=/css/hugo-theme.css?1592185552 rel=stylesheet><link href=/css/theme-blue.css?1592185552 rel=stylesheet><link href=/css/foo.css?1592185552 rel=stylesheet><link href=/css/bar.css?1592185552 rel=stylesheet><script src=/js/jquery-3.3.1.min.js?1592185552></script><style>:root #header+#content>#left>#rlblock_left{display:none!important}</style></head><body data-url=/deployment/exceptions/><nav id=sidebar><div id=header-wrapper><div id=header><a id=logo href=/><img src=//images/logo.png></a></div><div class=searchbox><label for=search-by><i class="fas fa-search"></i></label><input data-search-input id=search-by type=search placeholder=Search...>
+<span data-search-clear><i class="fas fa-times"></i></span></div><script type=text/javascript src=/js/lunr.min.js?1592185552></script><script type=text/javascript src=/js/auto-complete.js?1592185552></script><script type=text/javascript>var baseurl="\/";</script><script type=text/javascript src=/js/search.js?1592185552></script></div><div class=highlightable><ul class=topics><li data-nav-id=/deployment/ title="OWASP CRS Quickstart" class="dd-item
+parent"><a href=/deployment/>Deployment</a><ul><li data-nav-id=/deployment/install/ title="Installing CoreRuleSet" class=dd-item><a href=/deployment/install/><b>1. </b>Install</a></li><li data-nav-id=/deployment/configuration/ title=Configuration class=dd-item><a href=/deployment/configuration/><b>2. </b>Configuration</a></li><li data-nav-id=/deployment/rules/ title=Rules class=dd-item><a href=/deployment/rules/><b>3. </b>Rules</a></li><li data-nav-id=/deployment/exceptions/ title="Adding Exceptions and Tuning CRS" class="dd-item active"><a href=/deployment/exceptions/><b>4. </b>Exceptions</a></li><li data-nav-id=/deployment/testing/ title="Testing the Rule Set" class=dd-item><a href=/deployment/testing/><b>5. </b>Testing</a></li><li data-nav-id=/deployment/anomaly/ title="Anomaly Scoring Mode" class=dd-item><a href=/deployment/anomaly/><b>6. </b>Anomaly</a></li><li data-nav-id=/deployment/support/ title="Still need help?" class=dd-item><a href=/deployment/support/><b>8. </b>Support</a></li><li data-nav-id=/deployment/making/ title=Making class=dd-item><a href=/deployment/making/><b>9. </b>Making</a></li><li data-nav-id=/deployment/metadata/ title=Metadata class=dd-item><a href=/deployment/metadata/><b>10. </b>Metadata</a></li></ul></li><li data-nav-id=/development/ title=Developments class=dd-item><a href=/development/>Developments</a><ul><li data-nav-id=/development/ruleid/ title="Rule IDs" class=dd-item><a href=/development/ruleid/><b>1. </b>Rule IDs</a></li></ul></li></ul><section id=footer><p>Built with <a href=https://github.com/matcornic/hugo-theme-learn><i class="fas fa-heart"></i></a>from <a href=https://getgrav.org>Grav</a> and <a href=https://gohugo.io/>Hugo</a></p></section></div></nav><section id=body><div id=overlay></div><div class="padding highlightable"><div><div id=top-bar><div id=top-github-link><a class=github-link title="Edit this page" href=https://github.com/coreruleset/coreruleset-documentation/deployment/exceptions.md target=blank><i class="fas fa-code-branch"></i><span id=top-github-link-text>Edit this page</span></a></div><div id=breadcrumbs itemscope itemtype=http://data-vocabulary.org/Breadcrumb><span id=sidebar-toggle-span><a href=# id=sidebar-toggle data-sidebar-toggle><i class="fas fa-bars"></i></a></span><span id=toc-menu><i class="fas fa-list-alt"></i></span><span class=links>Adding Exceptions and Tuning CRS</span></div><div class=progress><div class=wrapper><nav id=TableOfContents><ul><li><a href=#modifying-rules>Modifying Rules</a><ul><li><a href=#exceptions-versus-whitelist>Exceptions versus Whitelist</a></li><li><a href=#writing-exceptions>Writing Exceptions</a></li><li><a href=#writing-whitelist-modifications>Writing Whitelist Modifications</a></li></ul></li><li><a href=#tuning-crs>Tuning CRS</a></li></ul></nav></div></div></div></div><div id=head-tags></div><div id=body-inner><h1>Adding Exceptions and Tuning CRS</h1><h2 id=modifying-rules>Modifying Rules</h2><p>OWASP Core Rule Set (CRS) as a rule set for ModSecurity has no context
+into what your web application is doing and how it is designed. As a
+result, often legitimate requests might seem to CRS to be attacks. This
+term is often called a <strong>False Positive</strong>. While the CRS team does its
+best to prevent these from happening, they are somewhat inevitable due
+to the blacklist nature of the rules. A quick example might illustrate
+the problem better.</p><p>Imagine you are running the popular Wordpress CMS engine. As part of
+this engine the capability exists to add both HTML (and JavaScript if
+you're an administrator) to your blog posts. Now Wordpress has rules
+around which tags can be used and their whitelist of tags has generally
+been studied pretty heavily by the security community. However,
+ModSecurity will only has visibility akin to
+<a href=http://www.mywordpressblog.com?wp>www.mywordpressblog.com?wp</a>_post=&lt;h1>Welcome+To+My+Blog&lt;/h1>. In
+this instance OWASP CRS sees HTML Injection, because that is what's
+there. ModSecurity will have no knowledge that this problem is mitigated
+server side and as a result may block the request. It is therefore
+necessary sometimes to add an exception.</p><p>The most common issues when adding exceptions to OWASP CRS is that if
+done 'inline' it will be clobbered by the next update. The ModSecurity
+team has developed sophisticated methods for dealing with this problem
+that are quite versatile.</p><h3 id=exceptions-versus-whitelist>Exceptions versus Whitelist</h3><p>There are two generally different methods for modifying rules.
+Exceptions, which will remove or modify the rule from startup time and
+whitelist modifications which can modify a rule based on the content of
+a transaction. In general whitelist rules are slightly more powerful but
+also more expensive as they must be evaluated every time a transaction
+comes in.</p><p>Within CRS 3.x two files are provided to help you add these different
+rule modifications, they are:
+rules/REQUEST-00-LOCAL-WHITELIST.conf.example and
+rules/RESPONSE-99-EXCEPTIONS.conf.example. As is noted in the
+<code>install</code>{.interpreted-text role="doc&rdquo;} documentation, the .example
+extension is provided specifically so that when these files are renamed,
+future updates will not overwrite these files. As is listed within the
+<code>install</code>{.interpreted-text role="doc&rdquo;} documentation, before adding a
+whitelist or exception modification you should rename these files to end
+in the .conf exception.</p><p>The naming of these files is also not an accident. Due to the
+transactional nature of the whitelist modifications, they need to take
+place BEFORE the rules they are affecting, since they are processed on
+every transaction. Conversely, the exceptions file contains directives
+that are evaluated on startup. As a result, these need to be some of the
+last rules included in your configuration such that data structures that
+store the rules are populated and it can modify them.</p><h3 id=writing-exceptions>Writing Exceptions</h3><p>Exceptions come in a few different forms which are all outlined in
+detail within the <a href=https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual>Reference
+Manual</a>.
+The following directives can be used to modify a rule at startup without
+touching the actual rule:</p><ul><li><a href=https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#SecRuleRemoveById>SecRuleRemoveById</a></li><li><a href=https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#SecRuleRemoveByMsg>SecRuleRemoveByMsg</a></li><li><a href=https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#SecRuleRemoveByTag>SecRuleRemoveByTag</a></li><li><a href=https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#SecRuleUpdateTargetById>SecRuleUpdateActionById</a></li><li><a href=https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#SecRuleUpdateTargetById>SecRuleUpdateTargetById</a></li><li><a href=https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#SecRuleUpdateTargetByMsg>SecRuleUpdateTargetByMsg</a></li><li><a href=https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#SecRuleUpdateTargetByTag>SecRuleUpdateTargetByTag</a></li></ul><p>You'll notice that there are two types of exceptions, those that
+remove, and those that change (or update) rules. General usage of the
+SecRuleRemove* rules is fairly straight forward:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRule ARGS <span style=color:#e6db74>&#34;@detectXSS&#34;</span> <span style=color:#e6db74>&#34;id:123,deny,status:403&#34;</span>
+SecRuleRemoveById <span style=color:#ae81ff>123</span>
+</code></pre></div><p>The above rule will remove rule 123. When ModSecurity starts up it will
+add rule 123 into its internal data structures and when it processes
+SecRuleRemoveById it will then remove it from it's internal data
+structures. The rule will not be processed for any transaction as by the
+time ModSecurity reaches the point where it's processing requests, the
+rule simply no longer exists.</p><p>The SecRuleUpdate* modifications are a bit more complicated. They have
+the capability to update a target or action based on some identifier.
+The update target rule is perhaps the simpler of the two to use.
+Modifying Targets (Variables) is easy, you can either append or replace.
+To append you simply only list one argument after
+SecRuleUpdateTargetBy*. This is great for adding exceptions as you can
+restrict a certain index of a collection from being inspected</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRule ARGS <span style=color:#e6db74>&#34;@detectXSS&#34;</span> <span style=color:#e6db74>&#34;id:123,deny,status:403&#34;</span>
+SecRuleUpdateTargetById <span style=color:#ae81ff>123</span> !ARGS:wp_post
+</code></pre></div><p>It is also possible to replace a target (variable). To do this you must
+first list the variable you want to replace with, followed by the
+variable you want to replace. So in the below example we replace the
+ARGS variable with ARGS_POST.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRule ARGS <span style=color:#e6db74>&#34;@detectXSS&#34;</span> <span style=color:#e6db74>&#34;id:123,deny,status:403&#34;</span>
+SecRuleUpdateTargetById <span style=color:#ae81ff>123</span> ARGS_POST ARGS
+</code></pre></div><p>Updating an action becomes a little more tricky as there are default
+actions and actions types of which only one can exist per rule. In
+general, transformations and actions that are not already included will
+be appended. There is one big exception to this rule and that is
+disruptive actions (pass, deny, etc) will always replace each other,
+there may only ever be one disruptive action. Additionally, certain
+logging actions will replace each other, for instance nolog would
+overwrite the log action. This functionality has the same rules as using
+<a href=https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#SecDefaultAction>SecDefaultAction</a>.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRule <span style=color:#e6db74>&#34;@detectXSS&#34;</span> attack <span style=color:#e6db74>&#34;phase:2,id:12345,t:lowercase,log,pass,msg:&#39;Message text&#39;&#34;</span>
+SecRuleUpdateActionById <span style=color:#ae81ff>12345</span> <span style=color:#e6db74>&#34;t:none,t:compressWhitespace,deny,status:403,msg:&#39;New message text&#39;&#34;</span>
+
+<span style=color:#75715e># Results in the following rule</span>
+SecRule ARGS <span style=color:#e6db74>&#34;@detectXSS &#34;</span>phase:2,id:12345,t:lowercase,t:none,t:compressWhitespace,log,deny,status:403,msg:&#39;New Message text&#39;<span style=color:#960050;background-color:#1e0010>&#34;</span>
+</code></pre></div><p>In general updating a rule to remove just the false positive is
+preferred over removing the entire rule. It should be noted that both
+actions should be taken with care as they do open a potential security
+hole. Before you add an exception within any rules you should make sure
+that the area where you are adding the exception is indeed a false
+positive and not vulnerable to the issue.</p><p>You may notice that it is not possible to change the operator of the
+rule via these exception Directives. To change the functionality of a
+rule you must use whitelist modifications OR remove the rule and add a
+new one.</p><h3 id=writing-whitelist-modifications>Writing Whitelist Modifications</h3><p>Whitelisting is more complicated than exceptions because the rules can
+be more varied. In some ways they are less powerful than exceptions, but
+in others they are far more powerful. Whitelist rules use the
+<a href=https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#ctl>ctl</a>
+action to change the state of the engine on a per transaction basis.
+This can be as simple as turning off the ruleEngine when a certain IP
+hits. Note, the ruleEngine will return to state from the configuration
+file for the next transaction.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRule REMOTE_ADDR <span style=color:#e6db74>&#34;@IPMatch 1.2.3.4&#34;</span> <span style=color:#e6db74>&#34;id:1,ctl:ruleEngine=Off&#34;</span>
+</code></pre></div><p>You can also use this rule to avoid certain rules in some cases, this
+effectively allows you to modify operators. In the following example we
+have a rule that will block the entire 129.21.x.x subnet (class B). We
+add a ctl modification before hand such that if we get a particular IP
+address in that range we remove the rule, effectively adding an
+exception</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRule REMOTE_ADDR <span style=color:#e6db74>&#34;@IPMatch 129.21.3.17&#34;</span> <span style=color:#e6db74>&#34;id:3,ctl:ruleRemoveById=4&#34;</span>
+SecRule REMOTE_ADDR <span style=color:#e6db74>&#34;@IPMatch 129.21.0.0/24&#34;</span> <span style=color:#e6db74>&#34;id:4,deny,status:403&#34;</span>
+</code></pre></div><p>The
+<a href=https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#ctl>ctl</a>
+action can also change the configuration of certain directives which can
+lead to more efficient rules. It is recommended that you investigate its
+full potential.</p><h2 id=tuning-crs>Tuning CRS</h2><p>CRS 3.x is designed to make it easy to remove rules that are not
+relevant to your configuration. Not only are Rules organized into files
+that are titled with general categories but we have also renumbered
+according to a scheme such that rule IDs can be used to quickly remove
+entire unwanted configurations files by using
+<a href=https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#SecRuleRemoveById>SecRuleRemoveById</a>.
+The following example removes all XSS rules which are located in the
+REQUEST-41-APPLICATION-ATTACK-XSS.conf file. Notice that all OWASP CRS
+rules are prefixed with '9' and then the next two digits represent the
+rules file.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRuleRemoveById <span style=color:#e6db74>&#34;941000-941999&#34;</span>
+</code></pre></div><p>The CRS rules also features tags to identify what their functionality
+is. It is therefore easy to remove an entire category that doesn't
+apply to your environment. In the following example we remove all IIS
+rules using
+<a href=https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#SecRuleRemoveByTag>SecRuleRemoveByTag</a>.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-apache data-lang=apache>SecRuleRemoveByTag <span style=color:#e6db74>&#34;platform-iis&#34;</span>
+</code></pre></div><footer class=footline></footer></div></div><div id=navigation><a class="nav nav-prev" href=/deployment/rules/ title=Rules><i class="fa fa-chevron-left"></i></a><a class="nav nav-next" href=/deployment/testing/ title="Testing the Rule Set" style=margin-right:0><i class="fa fa-chevron-right"></i></a></div></section><div style=left:-1000px;overflow:scroll;position:absolute;top:-1000px;border:none;box-sizing:content-box;height:200px;margin:0;padding:0;width:200px><div style=border:none;box-sizing:content-box;height:200px;margin:0;padding:0;width:200px></div></div><script src=/js/clipboard.min.js?1592185552></script><script src=/js/perfect-scrollbar.min.js?1592185552></script><script src=/js/perfect-scrollbar.jquery.min.js?1592185552></script><script src=/js/jquery.sticky.js?1592185552></script><script src=/js/featherlight.min.js?1592185552></script><script src=/js/highlight.pack.js?1592185552></script><script>hljs.initHighlightingOnLoad();</script><script src=/js/modernizr.custom-3.6.0.js?1592185552></script><script src=/js/learn.js?1592185552></script><script src=/js/hugo-learn.js?1592185552></script><link href=/mermaid/mermaid.css?1592185552 rel=stylesheet><script src=/mermaid/mermaid.js?1592185552></script><script>mermaid.initialize({startOnLoad:true});</script></body></html>
